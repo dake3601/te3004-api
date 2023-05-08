@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // Record Schema 
 const recordSchema = new mongoose.Schema({
-  createDate: {
+  timestamp: {
     type: Date,
     required: true,
   },

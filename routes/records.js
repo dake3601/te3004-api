@@ -19,7 +19,7 @@ router.post("/", async (request, response) => {
   }
 
   const record = new Record({
-    createDate: new Date(body.createDate),
+    timestamp: new Date(body.timestamp),
     direction: body.direction,
     setSpeed: body.setSpeed,
     voltage: body.voltage,
