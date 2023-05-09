@@ -1,5 +1,7 @@
 const createError = require('http-errors');
 const express = require('express');
+const app = express();
+const expressWs = require('express-ws')(app);
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -9,6 +11,7 @@ require('dotenv').config()
 
 const indexRouter = require('./routes/index');
 const recordsRouter = require("./routes/records");
+const { esp32, commands, updates } = require("./routes/sockets");
 
 console.log('connecting to', process.env.MONGODB_URI)
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true })
@@ -19,7 +22,6 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true })
     console.log('error connection to MongoDB:', error.message)
   })
 
-const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -36,6 +38,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/api/records', recordsRouter);
+
+app.ws('/api/esp32', esp32);
+app.ws('/api/commands', commands);
+app.ws('/api/updates', updates);
+
+app.ws('/echo', function (ws, req) {
+  ws.on('message', function (msg) {
+    ws.send(msg + " from server");
+  });
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
