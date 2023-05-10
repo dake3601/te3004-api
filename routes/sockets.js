@@ -4,12 +4,14 @@ const esp32Clients = [];
 
 const browserClients = [];
 
+const pingTime = 30000;
+
 function esp32(ws, req) {
 
   esp32Clients.push(ws);
   console.log('ESP32 connected');
 
-  ws.timer = setInterval(() => { ws.send("ping") }, 5000);
+  ws.timer = setInterval(() => { ws.send("ping") }, pingTime);
 
   ws.on('message', function (msg) {
     if (msg === "pong") return;
@@ -49,7 +51,7 @@ function esp32(ws, req) {
 
 function commands(ws, req) {
 
-  ws.timer = setInterval(() => { ws.send("ping") }, 5000);
+  ws.timer = setInterval(() => { ws.send("ping") }, pingTime);
 
   ws.on('message', function (msg) {
     if (msg === "pong") return;
@@ -70,7 +72,7 @@ function commands(ws, req) {
 
 function updates(ws, req) {
 
-  ws.timer = setInterval(() => { ws.send("ping") }, 5000);
+  ws.timer = setInterval(() => { ws.send("ping") }, pingTime);
 
   browserClients.push(ws);
 
