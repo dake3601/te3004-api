@@ -4,8 +4,18 @@ const Record = require("../models/record");
 
 // mongoose get for records
 router.get("/", async (request, response) => {
-  const records = await Record.find({});
-  response.json(records);
+  if (request.query.limit === undefined) {
+    const records = await Record.find();
+    response.json(records.reverse());
+    return;
+  }
+  if (isNaN(request.query.limit)) {
+    response.status(400).send({ error: "limit must be a number" });
+    return;
+  }
+  const records = await Record.find().sort({ timestamp: -1 }).limit(parseInt(request.query.limit));
+  response.json(records.reverse());
+  return;
 });
 
 // mongoose post for records

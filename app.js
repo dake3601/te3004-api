@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose')
 const cors = require("cors")
+const compression = require('compression')
 require('dotenv').config()
 
 const indexRouter = require('./routes/index');
@@ -22,6 +23,9 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true })
     console.log('error connection to MongoDB:', error.message)
   })
 
+
+// Compression
+app.use(compression());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
