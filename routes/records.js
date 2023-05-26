@@ -6,7 +6,7 @@ const Record = require("../models/record");
 router.get("/", async (request, response) => {
   if (request.query.limit === undefined) {
     const records = await Record.find();
-    response.json(records.reverse());
+    response.json(records);
     return;
   }
   if (isNaN(request.query.limit)) {
